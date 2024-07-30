@@ -1,0 +1,61 @@
+h2-server:
+  port: 7481     
+server:
+  port: 7443  
+  ssl:
+    enabled: true
+    key-store: classpath:mckeystore.jks
+    key-store-password: P@ssw0rdr1
+    key-store-type: JKS
+    key-alias: jtomobcol
+# if you have crt & key instead of jks, uncomment below
+    # certificate-private-key: mckey.key
+    # certificate: cert.crt
+
+
+# https://stackoverflow.com/questions/38302683/how-can-i-disable-tlsv1-0-with-spring-boot-and-embedded-tomcat
+    # protocol: TLS
+    # ciphers:
+    # - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256   
+    # enabled-protocols:
+    # - TLSv1.2
+# https://stackoverflow.com/questions/47989617/how-to-set-cookies-as-secure-flag-in-spring-boot    
+  servlet:  
+    session:
+      cookie:
+        secure: true
+        http-only: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        
+spring:
+  # ssl.bundle.pem:
+  #   mydemo:
+  #     reload-on-update: true
+  #     keystore:
+  #       certificate: "certt/demo.crt"
+  #       private-key: "certt/demo.key"
+  datasource:
+    url: jdbc:h2:mem:erpgatewayh2db;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+  h2:
+    console:
+      enabled: true
+  docker:
+    compose:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
+    

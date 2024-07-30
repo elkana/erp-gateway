@@ -1,0 +1,77 @@
+spring:
+  cloud:
+    gateway:     
+      mvc:
+        routes: 
+          - id: ledgerModule
+            uri: ${LEDGER_SERVICE_URL:http://localhost:9901}
+            # uri: lb://service-ledger
+            predicates:
+              - Path=/gl-svc/**
+            filters:
+              - AddRequestHeader=Content-Type, application/json              
+          - id: setupModule
+            uri: ${SETUP_SERVICE_URL:http://localhost:9905}
+            # uri: lb://service-setup
+            predicates:
+              - Path=/ms-svc/**
+            filters:
+              - AddRequestHeader=Content-Type, application/json              
+          - id: resourceModule
+            uri: ${RESOURCE_SERVICE_URL:http://localhost:9994}
+            predicates:
+              - Path=/resources/**
+            filters:
+              - AddRequestHeader=Content-Type, application/json
+# https://github.com/sivaprasadreddy/spring-boot-microservices-course/blob/main/api-gateway/src/main/resources/application.yml
+      #   - id: orders-service
+      #     uri: ${ORDER_SERVICE_URL:http://localhost:8082}
+      #     predicates:
+      #       - Path=/orders/**
+      #     filters:
+      #       - RewritePath=/orders/?(?<segment>.*), /${segment}
+      #   - id: openapi
+      #     uri: http://localhost:${server.port}
+      #     predicates:
+      #       - Path=/v3/api-docs/**
+      #     filters:
+      #       - RewritePath=/v3/api-docs/?(?<segment>.*), /${segment}/v3/api-docs
+      # default-filters:
+      #   - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Methods Access-Control-Allow-Headers RETAIN_FIRST
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: 
+              - GET
+              - POST
+              - DELETE
+            allowedHeaders:
+              - content-type
+              - Authorization
+              - ApiKey
+            # allow-credentials: true  
+            # allowedOrigins: "*"
+            # allowedMethods: "*"  
+            # allowedHeaders: 
+            #   - content-type
+            #   - Authorization
+            #   - Content-Type
+      # httpclient:
+      #   connect-timeout: 2000
+      #   response-timeout: 60s    
+
+# https://kambei.dev/blog/it/2022-12-27-centralized-swagger-with-spring-cloud-gateway/
+springdoc:
+  api-docs:
+    groups:
+      enabled: true
+  swagger-ui:
+    # config-url: /v3/api-docs/swagger-config
+    # url: /v3/api-docs
+    urls:
+      - url: /collector/v3/api-docs
+        name: Service Coll 1
+      - url: /service-2/v3/api-docs
+        name: Service 2        
