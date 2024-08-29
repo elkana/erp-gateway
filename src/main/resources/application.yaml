@@ -23,6 +23,20 @@ spring:
               - Path=/resources/**
             filters:
               - AddRequestHeader=Content-Type, application/json
+          - id: userSecurityModule
+            uri: ${USER_SECURITY_SERVICE_URL:http://localhost:9907}
+            predicates:
+              - Path=/us-svc/**
+            filters:
+              - AddRequestHeader=Content-Type, application/json
+          - id: userMenuModule
+            uri: ${USER_MENU_SERVICE_URL:http://localhost:9909}
+            predicates:
+              - Path=/um-svc/**
+            filters:
+              - AddRequestHeader=Content-Type, application/json
+
+
 # https://github.com/sivaprasadreddy/spring-boot-microservices-course/blob/main/api-gateway/src/main/resources/application.yml
       #   - id: orders-service
       #     uri: ${ORDER_SERVICE_URL:http://localhost:8082}
